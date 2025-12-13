@@ -4,28 +4,39 @@ import { authOptions } from "@/lib/authOptions";
 import { mongooseConnect } from "@/lib/mongodb";
 import ConnectionModel from "@/models/Connection";
 
+/**
+ * ACCEPT / REJECT CONNECTION
+ */
 export async function PUT(
   req: Request,
-  { params }: { params: { connectionId: string } }
+  { params }: { params: { connectionId: string } } // ✅ NOT Promise
 ) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id)
+  if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
+  const { connectionId } = params; // ✅ direct access
   const { status } = await req.json(); // accepted | rejected
-  if (!["accepted", "rejected"].includes(status))
+
+  if (!["accepted", "rejected"].includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+  }
 
   await mongooseConnect();
 
-  const conn = await ConnectionModel.findById(params.connectionId);
-  if (!conn) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  const connection = await ConnectionModel.findById(connectionId);
+  if (!connection) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
-  if (conn.receiverId !== session.user.id)
+  // only receiver can respond
+  if (String(connection.receiverId) !== String(session.user.id)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
-  conn.status = status;
-  await conn.save();
+  connection.status = status;
+  await connection.save();
 
-  return NextResponse.json(conn);
+  return NextResponse.json({ success: true });
 }
