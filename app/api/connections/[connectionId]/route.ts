@@ -1,23 +1,20 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { mongooseConnect } from "@/lib/mongodb";
 import ConnectionModel from "@/models/Connection";
 
-/**
- * ACCEPT / REJECT CONNECTION
- */
 export async function PUT(
-  req: Request,
-  { params }: { params: { connectionId: string } } // ✅ NOT Promise
+  request: NextRequest,
+  context: { params: Promise<{ connectionId: string }> } // ✅ MUST be Promise
 ) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { connectionId } = params; // ✅ direct access
-  const { status } = await req.json(); // accepted | rejected
+  const { connectionId } = await context.params; // ✅ await params
+  const { status } = await request.json();
 
   if (!["accepted", "rejected"].includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
@@ -30,7 +27,7 @@ export async function PUT(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  // only receiver can respond
+  // only receiver can accept / reject
   if (String(connection.receiverId) !== String(session.user.id)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
