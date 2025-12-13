@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import NewPostBox from './NewPostBox';
 import PostCard from './PostCard';
 import { Post } from '@/types/post';
+import ConnectionRequests from "@/components/ConnectionRequests";
 
 const fetcher = (url: string) => axios.get(url).then(r => r.data);
 
@@ -20,6 +21,8 @@ export default function Feed() {
 
   return (
     <div className="space-y-4">
+        <ConnectionRequests />
+
       <NewPostBox mutate={mutate} />
 
       {posts.map((post, i) => {

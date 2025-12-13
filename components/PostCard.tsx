@@ -6,6 +6,8 @@ import { useSession } from 'next-auth/react';
 import type { KeyedMutator } from 'swr';
 import type { Post, Comment } from '@/types/post';
 import CommentItem from './CommentItem';
+import ConnectButton from "@/components/ConnectButton";
+
 
 export default function PostCard({
   post,
@@ -196,16 +198,28 @@ export default function PostCard({
         />
 
         <div className="flex-1">
-          <div className="flex justify-between">
-            <div>
-              <div className="font-semibold">{post.authorName ?? 'Unknown'}</div>
-              <div className="text-sm text-gray-500">{/* optional subtitle */}</div>
-            </div>
+           <div className="flex items-center gap-2">
+  <span className="text-xs text-gray-400">
+    {post.createdAt ? new Date(post.createdAt).toLocaleString() : ''}
+  </span>
 
-            <div className="text-xs text-gray-400">
-              {post.createdAt ? new Date(post.createdAt).toLocaleString() : ''}
-            </div>
-          </div>
+  {post.authorId !== currentUserId && (
+    <ConnectButton userId={post.authorId} />
+  )}
+
+  {post.authorId === currentUserId && (
+    <button
+      onClick={deletePost}
+      disabled={deleting}
+      className="text-red-600 text-sm"
+    >
+      {deleting ? "Deleting..." : "Delete"}
+    </button>
+  )}
+</div>
+
+
+          
 
           <p className="mt-3 text-gray-800">{post.content}</p>
 
