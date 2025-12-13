@@ -23,8 +23,8 @@ export default function HomePage() {
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-gray-200" />
                   <div>
-                    <div className="font-semibold">Aditi Sharma</div>
-                    <div className="text-sm text-gray-500">Frontend Developer</div>
+                    <div className="font-semibold">Bill Gates</div>
+                    <div className="text-sm text-gray-500">Microsoft Owner</div>
                   </div>
                 </div>
               </div>

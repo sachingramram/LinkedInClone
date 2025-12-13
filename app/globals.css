@@ -1,10 +1,134 @@
 @import "tailwindcss";
 
-html, body, #__next {
+/* =========================================================
+   BASE (DESKTOP + TABLET)
+   ========================================================= */
+html,
+body,
+#__next {
   height: 100%;
 }
 
 body {
   @apply bg-gray-50 text-gray-900;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Desktop & tablet font size stays NORMAL */
+html {
+  font-size: 16px;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Prevent accidental overflow */
+* {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* =========================================================
+   MOBILE-ONLY RESPONSIVE OVERRIDES
+   ========================================================= */
+@media (max-width: 640px) {
+
+  /* Smaller base font on mobile */
+  html {
+    font-size: 14px;
+  }
+
+  /* ---------------- TEXT SCALING ---------------- */
+  p {
+    font-size: clamp(0.85rem, 2.8vw, 1rem);
+    line-height: 1.6;
+  }
+
+  h1 {
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+  }
+
+  h2 {
+    font-size: clamp(1.15rem, 4vw, 1.5rem);
+  }
+
+  h3 {
+    font-size: clamp(1rem, 3.5vw, 1.25rem);
+  }
+
+  .text-xs {
+    font-size: 0.7rem;
+  }
+
+  .text-sm {
+    font-size: 0.8rem;
+  }
+
+  /* ---------------- IMAGES ---------------- */
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  img.object-cover {
+    max-height: 260px;
+  }
+
+  /* ---------------- AVATARS ---------------- */
+  img.rounded-full,
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* ---------------- CARDS / POSTS ---------------- */
+  article,
+  .card {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+  }
+
+  /* ---------------- BUTTONS ---------------- */
+  button {
+    min-height: 40px;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  /* ---------------- INPUTS ---------------- */
+  input,
+  textarea {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  /* ---------------- COMMENTS / REPLIES ---------------- */
+  .pl-10 {
+    padding-left: 0.75rem !important;
+  }
+
+  /* ---------------- FLEX FIX ---------------- */
+  .flex {
+    flex-wrap: wrap;
+  }
+
+  /* ---------------- ICONS ---------------- */
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ---------------- SAFE AREA (NOTCH) ---------------- */
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
 }
